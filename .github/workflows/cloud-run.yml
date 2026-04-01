@@ -6,8 +6,8 @@ on:
       - main
 
 env:
-  # TODO: ⚠️ UPDATE THESE VARIABLES WITH YOUR ACTUAL GCP DETAILS ⚠️
-  PROJECT_ID: your-gcp-project-id
+  # GCP Configuration
+  PROJECT_ID: ai-voice-agent-c2a2b
   SERVICE: portfolio
   REGION: us-central1
   
