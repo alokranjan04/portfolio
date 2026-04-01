@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alok Ranjan — AI Program Leader</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #050d1a;
+  --navy2: #0a1628;
+  --blue: #1a6fff;
+  --blue2: #4d94ff;
+  --teal: #00d4aa;
+  --teal2: #00ffcc;
+  --white: #f0f4ff;
+  --muted: #8899bb;
+  --card: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --glow: 0 0 40px rgba(26,111,255,0.3);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  background: var(--navy);
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  font-size:1rem;
+  line-height:1.7;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* CUSTOM CURSOR */
+.cursor{
+  position:fixed;width:12px;height:12px;
+  background:var(--teal);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transition:transform 0.1s,opacity 0.2s;
+  mix-blend-mode:screen;
+}
+.cursor-trail{
+  position:fixed;width:36px;height:36px;
+  border:1px solid rgba(0,212,170,0.4);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transition:transform 0.15s ease,left 0.12s ease,top 0.12s ease;
+}
+
+/* CANVAS */
+#bg-canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:-1;pointer-events:none;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.25rem 5rem;
+  background:rgba(5, 13, 26, 0.7);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1.3rem;letter-spacing:0.05em;
+  background:linear-gradient(135deg,var(--blue2),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.nav-links{display:flex;gap:3rem;list-style:none}
+.nav-links a{
+  font-size:0.85rem;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--muted);
+  text-decoration:none;transition:color 0.3s;
+}
+.nav-links a:hover{color:var(--teal)}
+.nav-cta{
+  font-size:0.85rem;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;color:#050d1a;
+  background:var(--teal);
+  padding:0.75rem 1.8rem;border-radius:4px;
+  text-decoration:none;transition:all 0.3s;
+}
+.nav-cta:hover{background:var(--teal2);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,212,170,0.25)}
+
+/* HERO */
+#hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:8rem 5rem 4rem;
+}
+.hero-content{max-width:860px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  font-size:0.78rem;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--teal);border:1px solid rgba(0,212,170,0.3);
+  padding:0.5rem 1.2rem;border-radius:4px;margin-bottom:2.5rem;
+  animation:fadeUp 0.8s ease both;
+}
+.badge-dot{
+  width:8px;height:8px;background:var(--teal);
+  border-radius:50%;animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+
+.hero-name{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(3rem,6.5vw,5.5rem);
+  line-height:1.25;letter-spacing:0;
+  margin-bottom:2rem;
+  animation:fadeUp 0.8s 0.1s ease both;
+}
+.hero-name .line2{
+  background:linear-gradient(135deg,var(--blue2) 0%,var(--teal) 60%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-title{
+  font-size:1.1rem;font-weight:300;color:var(--muted);
+  letter-spacing:0.02em;margin-bottom:3rem;
+  line-height:2;
+  animation:fadeUp 0.8s 0.2s ease both;
+}
+.hero-stats{
+  display:flex;gap:3.5rem;margin-bottom:3.5rem;
+  animation:fadeUp 0.8s 0.3s ease both;
+}
+.stat-item{}
+.stat-num{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:2.2rem;color:var(--white);line-height:1.2;
+  background:linear-gradient(135deg,var(--white),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.stat-label{
+  font-size:0.78rem;color:var(--muted);letter-spacing:0.08em;
+  text-transform:uppercase;margin-top:0.5rem;line-height:1.4;
+}
+.hero-actions{
+  display:flex;gap:1.25rem;
+  animation:fadeUp 0.8s 0.4s ease both;
+}
+.btn-primary{
+  font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:600;
+  letter-spacing:0.1em;text-transform:uppercase;
+  background:linear-gradient(135deg,var(--blue),var(--teal));
+  color:#050d1a;padding:0.9rem 2.2rem;
+  border:none;border-radius:4px;cursor:none;
+  text-decoration:none;transition:all 0.3s;
+  display:inline-block;
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,212,170,0.35)}
+.btn-ghost{
+  font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:600;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--white);padding:0.9rem 2.2rem;
+  border:1px solid var(--border);border-radius:4px;
+  cursor:none;text-decoration:none;transition:all 0.3s;
+  display:inline-block;
+}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-3px)}
+
+.hero-scroll{
+  position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:0.6rem;
+  color:var(--muted);font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;
+  animation:fadeUp 0.8s 0.6s ease both;
+}
+.scroll-line{
+  width:1px;height:55px;
+  background:linear-gradient(to bottom,var(--teal),transparent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* SECTIONS */
+section{
+  position:relative;z-index:1;
+  padding:8rem 5rem;
+}
+.section-tag{
+  font-size:0.82rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:1.25rem;
+  display:flex;align-items:center;gap:0.85rem;
+}
+.section-tag::before{content:'';width:35px;height:1px;background:var(--teal)}
+.section-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(2.2rem,4.5vw,3.8rem);
+  line-height:1.2;letter-spacing:-0.02em;
+  margin-bottom:1.75rem;
+}
+.section-sub{
+  font-size:1.1rem;color:var(--muted);font-weight:300;
+  max-width:640px;line-height:1.8;margin-bottom:4.5rem;
+}
+
+/* ABOUT */
+#about{background:transparent}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.about-text p{
+  font-size:1.15rem;color:var(--muted);line-height:1.9;
+  margin-bottom:1.75rem;font-weight:300;
+}
+.about-text p strong{color:var(--white);font-weight:500}
+.skills-cloud{display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:2.5rem}
+.skill-tag{
+  font-size:0.82rem;letter-spacing:0.06em;
+  border:1px solid var(--border);
+  padding:0.5rem 1.1rem;border-radius:4px;
+  color:var(--muted);transition:all 0.3s;
+}
+.skill-tag:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-2px)}
+.about-card{
+  background:var(--navy2);border:1px solid var(--border);
+  border-radius:8px;padding:2.5rem;
+  position:relative;overflow:hidden;
+}
+.about-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--teal));
+}
+.metric-list{list-style:none}
+.metric-list li{
+  padding:1.1rem 0;border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:0.95rem;
+}
+.metric-list li:last-child{border-bottom:none}
+.metric-list .ml{color:var(--muted)}
+.metric-list .mv{
+  font-family:'Syne',sans-serif;font-weight:700;
+  background:linear-gradient(135deg,var(--blue2),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  font-size:1.1rem;
+}
+
+/* EXPERIENCE */
+#experience{background:transparent}
+.exp-list{display:flex;flex-direction:column;gap:2rem}
+.exp-card{
+  background:var(--navy2);border:1px solid var(--border);
+  border-radius:8px;padding:2.5rem 3rem;
+  display:grid;grid-template-columns:220px 1fr;gap:2.5rem;
+  transition:all 0.3s;position:relative;overflow:hidden;
+  cursor:none;
+}
+.exp-card:hover{border-color:rgba(0,212,170,0.3);transform:translateX(6px)}
+.exp-card::after{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(to bottom,var(--blue),var(--teal));
+  transform:scaleY(0);transition:transform 0.3s;transform-origin:top;
+}
+.exp-card:hover::after{transform:scaleY(1)}
+.exp-meta{}
+.exp-company{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:0.95rem;color:var(--teal);
+  letter-spacing:0.05em;margin-bottom:0.4rem;
+}
+.exp-period{font-size:0.82rem;color:var(--muted);letter-spacing:0.05em}
+.exp-location{font-size:0.82rem;color:var(--muted);margin-top:0.3rem}
+.exp-content{}
+.exp-role{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:1.15rem;margin-bottom:1rem;
+}
+.exp-bullets{list-style:none}
+.exp-bullets li{
+  font-size:0.95rem;color:var(--muted);line-height:1.8;
+  padding:0.4rem 0;padding-left:1.25rem;position:relative;
+}
+.exp-bullets li::before{
+  content:'▸';position:absolute;left:0;
+  color:var(--teal);font-size:0.8rem;top:0.4rem;
+}
+.exp-tag{
+  display:inline-block;font-size:0.75rem;letter-spacing:0.08em;
+  text-transform:uppercase;background:rgba(0,212,170,0.1);
+  color:var(--teal);border:1px solid rgba(0,212,170,0.2);
+  padding:0.35rem 0.85rem;border-radius:4px;margin-top:1rem;margin-right:0.4rem;
+}
+
+/* PROJECTS */
+#projects{background:transparent}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.proj-card{
+  background:var(--navy2);border:1px solid var(--border);
+  border-radius:8px;padding:2.5rem;
+  transition:all 0.4s;position:relative;
+  overflow:hidden;cursor:none;
+}
+.proj-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(135deg,rgba(26,111,255,0.05),rgba(0,212,170,0.05));
+  opacity:0;transition:opacity 0.4s;
+}
+.proj-card:hover::before{opacity:1}
+.proj-card:hover{border-color:rgba(0,212,170,0.3);transform:translateY(-6px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+.proj-icon{
+  font-size:2.5rem;margin-bottom:1.5rem;
+  display:block;
+}
+.proj-num{
+  position:absolute;top:1.5rem;right:1.5rem;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:3.5rem;
+  color:rgba(255,255,255,0.03);line-height:1;
+}
+.proj-name{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:1.15rem;margin-bottom:0.75rem;
+}
+.proj-desc{
+  font-size:0.95rem;color:var(--muted);line-height:1.7;
+  margin-bottom:1.5rem;
+}
+.proj-metrics{display:flex;gap:0.6rem;flex-wrap:wrap}
+.proj-metric{
+  font-size:0.75rem;letter-spacing:0.06em;
+  background:rgba(26,111,255,0.1);
+  color:var(--blue2);
+  border:1px solid rgba(26,111,255,0.2);
+  padding:0.3rem 0.8rem;border-radius:4px;
+}
+.proj-link{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-size:0.88rem;color:var(--teal);text-decoration:none;
+  margin-top:1.25rem;transition:gap 0.2s;
+  font-weight:500;
+}
+.proj-link:hover{gap:0.85rem}
+
+/* ARTICLES */
+#articles{background:transparent}
+.articles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem}
+.article-card{
+  background:var(--navy2);border:1px solid var(--border);
+  border-radius:8px;padding:2.25rem;
+  transition:all 0.3s;cursor:none;
+}
+.article-card:hover{border-color:rgba(0,212,170,0.3);transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,0.25)}
+.article-day{
+  font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:1rem;
+}
+.article-title{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:1.1rem;line-height:1.45;margin-bottom:0.8rem;
+}
+.article-excerpt{
+  font-size:0.95rem;color:var(--muted);line-height:1.7;
+}
+.article-tag{
+  display:inline-block;margin-top:1.25rem;
+  font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--border);
+  padding:0.3rem 0.8rem;border-radius:4px;
+}
+
+/* CONTACT */
+#contact{
+  background:transparent;
+  text-align:center;
+  padding:10rem 5rem;
+}
+.contact-inner{max-width:800px;margin:0 auto}
+.contact-big{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(3rem,6.5vw,5.5rem);
+  line-height:1.05;letter-spacing:-0.03em;margin-bottom:2rem;
+}
+.contact-big span{
+  background:linear-gradient(135deg,var(--blue2),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.contact-sub{
+  font-size:1.1rem;color:var(--muted);margin-bottom:3.5rem;line-height:1.8;
+}
+.contact-links{display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap;margin-bottom:3.5rem}
+.contact-link{
+  display:flex;align-items:center;gap:0.75rem;
+  font-size:0.92rem;color:var(--muted);text-decoration:none;
+  border:1px solid var(--border);padding:1rem 1.75rem;border-radius:6px;
+  transition:all 0.3s;
+}
+.contact-link:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,212,170,0.15)}
+.contact-link .icon{font-size:1.15rem}
+.availability{
+  display:inline-flex;align-items:center;gap:0.75rem;
+  font-size:0.88rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--teal);background:rgba(0,212,170,0.08);
+  border:1px solid rgba(0,212,170,0.2);
+  padding:0.75rem 1.75rem;border-radius:6px;
+  margin-bottom:1rem;
+}
+
+/* FOOTER */
+footer{
+  background:var(--navy);border-top:1px solid var(--border);
+  padding:2.5rem 5rem;
+  display:flex;justify-content:space-between;align-items:center;
+  position:relative;z-index:1;
+}
+.footer-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;
+  background:linear-gradient(135deg,var(--blue2),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.footer-copy{font-size:0.82rem;color:var(--muted)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.reveal{opacity:0;transform:translateY(40px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* GRID LINES */
+.grid-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  pointer-events:none;z-index:-1;
+  background-image:
+    linear-gradient(rgba(26,111,255,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(26,111,255,0.03) 1px,transparent 1px);
+  background-size:80px 80px;
+}
+
+/* GLOW ORBS */
+.orb{
+  position:fixed;border-radius:50%;filter:blur(80px);
+  pointer-events:none;z-index:-1;
+}
+.orb1{
+  width:600px;height:600px;
+  background:rgba(26,111,255,0.08);
+  top:-200px;right:-200px;
+  animation:orbFloat 8s ease-in-out infinite;
+}
+.orb2{
+  width:400px;height:400px;
+  background:rgba(0,212,170,0.06);
+  bottom:100px;left:-100px;
+  animation:orbFloat 10s ease-in-out infinite reverse;
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0)}
+  50%{transform:translate(30px,-30px)}
+}
+
+/* SCROLL PROGRESS */
+.progress-bar{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--teal));
+  z-index:1000;transition:width 0.1s;
+}
+
+/* RESPONSIVE */
+@media(max-width:1200px){
+  nav{padding:1.25rem 3rem}
+  #hero{padding:6rem 3rem 3rem}
+  section{padding:6rem 3rem}
+  footer{padding:2rem 3rem}
+}
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  #hero{padding:5rem 1.5rem 2rem}
+  section{padding:4rem 1.5rem}
+  #contact{padding:5rem 1.5rem}
+  .about-grid{grid-template-columns:1fr;gap:3rem}
+  .projects-grid{grid-template-columns:1fr}
+  .exp-card{grid-template-columns:1fr;padding:1.5rem}
+  .articles-grid{grid-template-columns:1fr}
+  .hero-stats{gap:2rem;flex-wrap:wrap}
+  .hero-name{font-size:clamp(3rem,12vw,4.5rem)}
+  .hero-title{font-size:1.05rem;line-height:1.8;margin-bottom:2.5rem}
+  .stat-num{font-size:2.2rem}
+  .contact-links{flex-direction:column;align-items:center}
+  footer{padding:1.5rem;flex-direction:column;gap:0.75rem;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+<div class="progress-bar" id="progressBar"></div>
+<div class="grid-overlay"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">AR</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#articles">Articles</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="Alok_Ranjan_Profile.pdf" download style="color:var(--teal)">Download Profile</a></li>
+  </ul>
+  <a href="mailto:alokranjan04@gmail.com" class="nav-cta">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Available · Immediate Joiner · 70 LPA+
+    </div>
+    <h1 class="hero-name">
+      Alok<br>
+      <span class="line2">Ranjan</span>
+    </h1>
+    <p class="hero-title">
+      AI Program Leader · Voice AI Builder · GenAI Delivery Expert<br>
+      Technical Program Manager · GCP Certified · PMP Trained
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Years delivering AI</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">90%+</div>
+        <div class="stat-label">CX outcomes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">400+</div>
+        <div class="stat-label">Agent hours/mo saved</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">20+</div>
+        <div class="stat-label">Team size led</div>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Get In Touch</a>
+      <a href="Alok_Ranjan_Profile.pdf" download class="btn-ghost">Download Profile</a>
+      <a href="#experience" class="btn-ghost" style="opacity:0.7">View Experience</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="section-tag">About</div>
+      <h2 class="section-title">I build AI programs that work in production.</h2>
+      <p>Over 15 years, I've led end-to-end delivery of <strong>LLM-powered platforms, voice AI systems, and B2B SaaS products</strong> — bridging the gap between what AI can do and what enterprises need it to do.</p>
+      <p>Most recently at Sutherland Global, I directed the AI voice automation program that achieved <strong>24/7 service availability and 90%+ reduction in missed critical calls</strong>. Before that, led a 20+ member SAFe team to a 95% sprint completion rate at Happiest Minds.</p>
+      <p>I'm also building <strong>tellyourjourney.com</strong> — a voice AI product for private healthcare clinics in Delhi-NCR, solving the Hinglish problem that defeats every global voice AI player.</p>
+      <div class="skills-cloud">
+        <span class="skill-tag">LLM Delivery</span>
+        <span class="skill-tag">Voice AI</span>
+        <span class="skill-tag">GenAI</span>
+        <span class="skill-tag">RAG Pipelines</span>
+        <span class="skill-tag">Conversational AI</span>
+        <span class="skill-tag">SAFe / Agile</span>
+        <span class="skill-tag">GCP</span>
+        <span class="skill-tag">AWS</span>
+        <span class="skill-tag">Kubernetes</span>
+        <span class="skill-tag">CI/CD</span>
+        <span class="skill-tag">NLP</span>
+        <span class="skill-tag">Prompt Engineering</span>
+        <span class="skill-tag">OKR Alignment</span>
+        <span class="skill-tag">CX Automation</span>
+        <span class="skill-tag">IVR Systems</span>
+        <span class="skill-tag">CrewAI</span>
+        <span class="skill-tag">Jira</span>
+        <span class="skill-tag">n8n</span>
+      </div>
+    </div>
+    <div class="about-card reveal">
+      <ul class="metric-list">
+        <li><span class="ml">Missed critical calls reduced</span><span class="mv">90%+</span></li>
+        <li><span class="ml">Agent hours saved monthly</span><span class="mv">400+</span></li>
+        <li><span class="ml">Sprint goal completion rate</span><span class="mv">95%</span></li>
+        <li><span class="ml">Delivery cycle improvement</span><span class="mv">25% faster</span></li>
+        <li><span class="ml">Cross-team collaboration boost</span><span class="mv">+40%</span></li>
+        <li><span class="ml">Integration defect reduction</span><span class="mv">-30%</span></li>
+        <li><span class="ml">AI tool enterprise adoption</span><span class="mv">+30%</span></li>
+        <li><span class="ml">SaaS users served (zero defects)</span><span class="mv">13,000+</span></li>
+        <li><span class="ml">Agent response time reduction</span><span class="mv">-40%</span></li>
+        <li><span class="ml">Notice period</span><span class="mv">Immediate</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-tag reveal">Experience</div>
+  <h2 class="section-title reveal">15 Years of<br>Delivery Leadership</h2>
+  <p class="section-sub reveal">From UI developer to AI program director — every role built deeper technical and leadership capability.</p>
+
+  <div class="exp-list">
+    <div class="exp-card reveal">
+      <div class="exp-meta">
+        <div class="exp-company">Sutherland Global</div>
+        <div class="exp-period">Oct 2025 – Apr 2026</div>
+        <div class="exp-location">Bangalore, India</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Senior Manager — AI Program Delivery | Conversational IVR</div>
+        <ul class="exp-bullets">
+          <li>Directed AI voice automation program — 90%+ reduction in missed critical calls, 24/7 availability</li>
+          <li>Managed LLM compute resource allocation on cloud — proactively mitigated latency and cost risks</li>
+          <li>Built C-suite program dashboards: schedule variance, resource utilisation, AI KPIs</li>
+          <li>Partnered with executive stakeholders on scope, backlog, and change control</li>
+        </ul>
+        <span class="exp-tag">Voice AI</span>
+        <span class="exp-tag">LLM</span>
+        <span class="exp-tag">IVR</span>
+        <span class="exp-tag">GCP</span>
+      </div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-meta">
+        <div class="exp-company">Happiest Minds</div>
+        <div class="exp-period">Mar 2025 – Oct 2025</div>
+        <div class="exp-location">Bangalore, India</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Technical Project Manager — AI & Enterprise Delivery</div>
+        <ul class="exp-bullets">
+          <li>Led 20+ member cross-functional Agile/SAFe team — 25% faster cycles, 95% sprint completion</li>
+          <li>Delivered B2B supply chain intelligence dashboard — 100% feature-priority alignment</li>
+          <li>SAFe adoption: 40% collaboration improvement, 30% defect reduction</li>
+        </ul>
+        <span class="exp-tag">SAFe</span>
+        <span class="exp-tag">B2B SaaS</span>
+        <span class="exp-tag">Agile</span>
+      </div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-meta">
+        <div class="exp-company">ArteezHR</div>
+        <div class="exp-period">Mar 2023 – Feb 2025</div>
+        <div class="exp-location">New Delhi, India</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Technical Manager — AI Programs & Digital Transformation</div>
+        <ul class="exp-bullets">
+          <li>0-to-1 aviation portal delivery in 6 months — all constraints met</li>
+          <li>CX automation tools with Gemini Pro + CrewAI — 40% agent response reduction</li>
+          <li>Lean process redesign — 18% escalation rate reduction</li>
+        </ul>
+        <span class="exp-tag">Gemini Pro</span>
+        <span class="exp-tag">CrewAI</span>
+        <span class="exp-tag">LLM</span>
+      </div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-meta">
+        <div class="exp-company">TaskUs</div>
+        <div class="exp-period">Aug 2021 – Dec 2022</div>
+        <div class="exp-location">Gurgaon, India</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Technical Product Manager — AI & BPO Automation</div>
+        <ul class="exp-bullets">
+          <li>LLM agent assistant + automated ticket triage — 400+ agent hours/month saved</li>
+          <li>SQL-based CX analytics dashboards — 25% CSAT improvement</li>
+          <li>30% enterprise AI adoption boost in 6 months</li>
+        </ul>
+        <span class="exp-tag">LLM</span>
+        <span class="exp-tag">Ticket Triage</span>
+        <span class="exp-tag">CX Analytics</span>
+      </div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-meta">
+        <div class="exp-company">Concentrix</div>
+        <div class="exp-period">Oct 2015 – Aug 2021</div>
+        <div class="exp-location">Gurgaon, India</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Senior Manager — Product & Technology</div>
+        <ul class="exp-bullets">
+          <li>Enterprise SaaS analytics platform serving 13,000+ users — zero critical post-launch defects</li>
+          <li>AI personalisation features — 25% retention improvement</li>
+          <li>CI/CD automation — 30% sprint delivery time reduction</li>
+        </ul>
+        <span class="exp-tag">SaaS</span>
+        <span class="exp-tag">AI Personalisation</span>
+        <span class="exp-tag">CI/CD</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-tag reveal">Live Projects</div>
+  <h2 class="section-title reveal">Built. Shipped.<br>Running in Production.</h2>
+  <p class="section-sub reveal">Not side projects. Live systems with real users and real outcomes.</p>
+
+  <div class="projects-grid">
+    <div class="proj-card reveal">
+      <span class="proj-icon">🎙️</span>
+      <span class="proj-num">01</span>
+      <div class="proj-name">Voice AI Platform</div>
+      <div class="proj-desc">tellyourjourney.com — End-to-end voice-based AI storytelling and CX automation. Hinglish-native voice agent for Delhi-NCR private healthcare clinics. Solving a ₹1-2 lakh/month revenue leak for 15,000+ clinics.</div>
+      <div class="proj-metrics">
+        <span class="proj-metric">Hinglish ASR</span>
+        <span class="proj-metric">Sarvam AI</span>
+        <span class="proj-metric">FastAPI</span>
+        <span class="proj-metric">Exotel</span>
+      </div>
+      <a href="https://tellyourjourney.com" class="proj-link" target="_blank">Visit Live →</a>
+    </div>
+
+    <div class="proj-card reveal">
+      <span class="proj-icon">📊</span>
+      <span class="proj-num">02</span>
+      <div class="proj-name">Agent Success Console</div>
+      <div class="proj-desc">Real-time AI agent performance and adoption analytics dashboard. Deployed on GCP (Asia South-1). Tracks agent KPIs, bot adoption rates, CSAT, and program health metrics for enterprise CX teams.</div>
+      <div class="proj-metrics">
+        <span class="proj-metric">GCP</span>
+        <span class="proj-metric">Real-time Analytics</span>
+        <span class="proj-metric">AI Adoption</span>
+      </div>
+      <a href="https://agent-success-app-536573436709.asia-south1.run.app" class="proj-link" target="_blank">View Dashboard →</a>
+    </div>
+
+    <div class="proj-card reveal">
+      <span class="proj-icon">🤖</span>
+      <span class="proj-num">03</span>
+      <div class="proj-name">Enterprise Voicebot</div>
+      <div class="proj-desc">AI-driven IVR and voice automation deployed for enterprise after-hours customer support at Sutherland Global. Achieved 24/7 availability and 90%+ reduction in missed critical calls across global enterprise accounts.</div>
+      <div class="proj-metrics">
+        <span class="proj-metric">90%+ Call Reduction</span>
+        <span class="proj-metric">24/7 Availability</span>
+        <span class="proj-metric">LLM Integrated</span>
+      </div>
+      <a href="#contact" class="proj-link">Request Case Study →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ARTICLES -->
+<section id="articles">
+  <div class="section-tag reveal">Thought Leadership</div>
+  <h2 class="section-title reveal">Publishing Daily on<br>AI Program Delivery</h2>
+  <p class="section-sub reveal">29-day LinkedIn content sprint — practitioner perspective, no hype. Real deployments, real failures, real lessons.</p>
+
+  <div class="articles-grid">
+    <div class="article-card reveal">
+      <div class="article-day">Day 1 · Voice AI · Delivery</div>
+      <div class="article-title">Why 90% of enterprise AI projects fail in delivery — not in design</div>
+      <div class="article-excerpt">The 4 governance failures that kill AI programmes after go-live: compute budget drift, sprint cadence mismatch, stakeholder disappearance, and zero change management plan.</div>
+      <span class="article-tag">2,940 chars · LinkedIn</span>
+    </div>
+
+    <div class="article-card reveal">
+      <div class="article-day">Day 3 · Voice AI · Case Study</div>
+      <div class="article-title">How I delivered a voice AI system that answered 90%+ more critical calls</div>
+      <div class="article-excerpt">Full case study: problem, architecture, sprint governance, deployment, and the metric that changed everything. What a well-governed 0-to-production looks like.</div>
+      <span class="article-tag">Documentary style · LinkedIn</span>
+    </div>
+
+    <div class="article-card reveal">
+      <div class="article-day">Day 13 · Healthcare AI · Market Research</div>
+      <div class="article-title">Noida has 3,000+ clinics losing ₹1–2 lakh/month to unanswered calls</div>
+      <div class="article-excerpt">Original research on the Delhi-NCR private clinic voice AI opportunity. 30–50% missed call rate, the Hinglish barrier, and why no funded player has entered this market yet.</div>
+      <span class="article-tag">Original research · Voice AI India</span>
+    </div>
+
+    <div class="article-card reveal">
+      <div class="article-day">Day 23 · India AI · Market Insight</div>
+      <div class="article-title">Voice AI in India has a Hinglish problem. Whoever solves it wins 500M users</div>
+      <div class="article-excerpt">76% of Delhi's population communicates in Hinglish. Standard IVR fails. Global AI fails. The technical moat — mixed-language ASR with Hinglish NLU — is real and buildable.</div>
+      <span class="article-tag">Hinglish · Sarvam AI · India</span>
+    </div>
+
+    <div class="article-card reveal">
+      <div class="article-day">Day 7 · Leadership · GenAI</div>
+      <div class="article-title">What CEOs get wrong when they say "we're doing AI" — a TPM's perspective</div>
+      <div class="article-excerpt">The gap between AI strategy announcements and actual delivery. Why programme governance is the missing link in most digital transformations.</div>
+      <span class="article-tag">Executive comms · AI transformation</span>
+    </div>
+
+    <div class="article-card reveal">
+      <div class="article-day">Day 15 · Framework · AI Governance</div>
+      <div class="article-title">The AI programme governance framework I use for every LLM deployment</div>
+      <div class="article-excerpt">My proprietary framework: WBS structure, RAID log for AI, compute budget governance, model quality gates, and executive dashboard design. Shareable as a template.</div>
+      <span class="article-tag">Framework · LLM delivery · Template</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="availability reveal">
+      <span class="badge-dot"></span>
+      Immediate Joiner · Zero Notice Period
+    </div>
+    <h2 class="contact-big reveal">
+      Let's Build<br><span>Something.</span>
+    </h2>
+    <p class="contact-sub reveal">
+      Senior TPM · AI Program Director · Voice AI Expert<br>
+      15+ years · 70 LPA+ · Delhi-NCR / Bangalore / Remote
+    </p>
+    <div class="contact-links reveal">
+      <a href="mailto:alokranjan04@gmail.com" class="contact-link">
+        <span class="icon">✉</span> alokranjan04@gmail.com
+      </a>
+      <a href="tel:+917042915552" class="contact-link">
+        <span class="icon">📞</span> +91-7042915552
+      </a>
+      <a href="https://linkedin.com/in/alokranjan04" target="_blank" class="contact-link">
+        <span class="icon">💼</span> LinkedIn
+      </a>
+      <a href="https://tellyourjourney.com" target="_blank" class="contact-link">
+        <span class="icon">🎙️</span> tellyourjourney.com
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Alok Ranjan — AI Program Leader</div>
+  <div class="footer-copy">© 2026 · Delhi-NCR / Bangalore · Available Immediately</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursorTrail');
+let mx=0,my=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=(mx-6)+'px';
+  cursor.style.top=(my-6)+'px';
+});
+function animTrail(){
+  tx+=(mx-tx)*0.12; ty+=(my-ty)*0.12;
+  trail.style.left=(tx-16)+'px';
+  trail.style.top=(ty-16)+'px';
+  requestAnimationFrame(animTrail);
+}
+animTrail();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.transform='scale(2)';trail.style.transform='scale(1.5)'});
+  el.addEventListener('mouseleave',()=>{cursor.style.transform='scale(1)';trail.style.transform='scale(1)'});
+});
+
+// PROGRESS BAR
+const bar = document.getElementById('progressBar');
+window.addEventListener('scroll',()=>{
+  const p = window.scrollY/(document.body.scrollHeight-window.innerHeight);
+  bar.style.width=(p*100)+'%';
+});
+
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+reveals.forEach(r=>observer.observe(r));
+
+// THREE.JS PARTICLE FIELD
+const canvas = document.getElementById('bg-canvas');
+const renderer = new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(window.innerWidth,window.innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,1000);
+camera.position.z = 300;
+
+// PARTICLES
+const COUNT = 2000;
+const geo = new THREE.BufferGeometry();
+const pos = new Float32Array(COUNT*3);
+const colors = new Float32Array(COUNT*3);
+const sizes = new Float32Array(COUNT);
+
+for(let i=0;i<COUNT;i++){
+  pos[i*3]=(Math.random()-0.5)*800;
+  pos[i*3+1]=(Math.random()-0.5)*800;
+  pos[i*3+2]=(Math.random()-0.5)*400;
+  const t = Math.random();
+  if(t<0.5){colors[i*3]=0.1;colors[i*3+1]=0.44;colors[i*3+2]=1.0}
+  else{colors[i*3]=0.0;colors[i*3+1]=0.83;colors[i*3+2]=0.67}
+  sizes[i]=Math.random()*2+0.5;
+}
+geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
+geo.setAttribute('size',new THREE.BufferAttribute(sizes,1));
+
+const mat = new THREE.PointsMaterial({
+  size:1.5,vertexColors:true,transparent:true,
+  opacity:0.6,sizeAttenuation:true,
+});
+const particles = new THREE.Points(geo,mat);
+scene.add(particles);
+
+// CONNECTING LINES (sparse)
+const lineGeo = new THREE.BufferGeometry();
+const linePos = [];
+const lineSample = 100;
+for(let i=0;i<lineSample;i++){
+  const ai = Math.floor(Math.random()*COUNT);
+  const bi = Math.floor(Math.random()*COUNT);
+  const dx=pos[ai*3]-pos[bi*3],dy=pos[ai*3+1]-pos[bi*3+1],dz=pos[ai*3+2]-pos[bi*3+2];
+  const dist=Math.sqrt(dx*dx+dy*dy+dz*dz);
+  if(dist<80){
+    linePos.push(pos[ai*3],pos[ai*3+1],pos[ai*3+2]);
+    linePos.push(pos[bi*3],pos[bi*3+1],pos[bi*3+2]);
+  }
+}
+lineGeo.setAttribute('position',new THREE.Float32BufferAttribute(linePos,3));
+const lineMat = new THREE.LineBasicMaterial({color:0x1a6fff,transparent:true,opacity:0.08});
+scene.add(new THREE.LineSegments(lineGeo,lineMat));
+
+// MOUSE INTERACTION
+let mouseX=0,mouseY=0;
+document.addEventListener('mousemove',e=>{
+  mouseX=(e.clientX/window.innerWidth-0.5)*50;
+  mouseY=-(e.clientY/window.innerHeight-0.5)*50;
+});
+
+// ANIMATE
+let t=0;
+function animate(){
+  requestAnimationFrame(animate);
+  t+=0.001;
+  particles.rotation.y=t*0.2;
+  particles.rotation.x=t*0.1;
+  camera.position.x+=(mouseX-camera.position.x)*0.02;
+  camera.position.y+=(mouseY-camera.position.y)*0.02;
+  camera.lookAt(scene.position);
+  renderer.render(scene,camera);
+}
+animate();
+
+// COUNTER ANIMATION
+function animateCounter(el,target,suffix=''){
+  let start=0;
+  const dur=1500;
+  const step=timestamp=>{
+    if(!start) start=timestamp;
+    const p=Math.min((timestamp-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=Math.floor(ease*target)+suffix;
+    if(p<1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+// RESIZE
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+</script>
+</body>
+</html>
